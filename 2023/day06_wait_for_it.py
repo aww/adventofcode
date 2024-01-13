@@ -3,10 +3,9 @@ import math
 
 def read_races(rr: str = None, fix_kerning=False) -> list[tuple[int, int]]:
     if rr is None:
-        fn = 'day06_boat_race_input.txt'
+        fn = '../private/2023/day06_boat_race_input.txt'
         with open(fn, 'r') as f:
             rr = f.read()
-    print(rr)
     line1, line2 = rr.strip().split('\n')
     label, values = line1.split(':')
     assert label == 'Time'
@@ -50,14 +49,14 @@ def ways_to_beat_fast(t: int, d: int) -> int:
             # => can't count end points (they are ties of the record)
             return i-2
     x, y = (t - math.sqrt(t*t-4*d))/2, (t + math.sqrt(t*t-4*d))/2
-    print(x, y)
+    # print(x, y)
     count = math.floor(y) - math.ceil(x) + 1
-    print(count)
+    # print(count)
     return count
 
 
 def main():
-    races = read_races(None, fix_kerning=True)
+    races = read_races()
     print(races)
     ways = list([ways_to_beat_fast(r[0], r[1]) for r in races])
     print(f"Ways to beat record in each race: {ways}")
@@ -65,6 +64,7 @@ def main():
     for w in ways:
         prod *= w
     print(f"Product = {prod}")
+    print()
     races = read_races(None, fix_kerning=True)
     result_after_fix = ways_to_beat_fast(races[0][0], races[0][1])
     print(f"After fixing kerning they ways are {result_after_fix}")
@@ -72,15 +72,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-def test_ways_to_beat():
-    races = read_races("""Time:      7  15   30
-Distance:  9  40  200""")
-    assert [ways_to_beat(r[0], r[1]) for r in races] == [4, 8, 9]
-
-
-def test_ways_to_beat_fast():
-    races = read_races("""Time:      7  15   30
-Distance:  9  40  200""")
-    assert [ways_to_beat_fast(r[0], r[1]) for r in races] == [4, 8, 9]

@@ -1,4 +1,8 @@
-fn = 'day04a_scratch_cards_input.txt'
+
+
+def read_input():
+    with open('../private/2023/day04_scratch_cards_input.txt', 'r') as f:
+        return f.readlines()
 
 
 def get_winning_set(s: str) -> set:
@@ -25,25 +29,13 @@ def card_count(matches: list[int]) -> int:
 
 
 if __name__ == '__main__':
-    with open(fn, 'r') as f:
-        match_count: list[int] = []
-        score = 0
-        for line in f:
-            winning_set = get_winning_set(line)
-            match_count.append(len(winning_set))
-            if len(winning_set) > 0:
-                score += 2**(len(winning_set)-1)
-        print(f'"Score" = {score}')
-        cc = card_count(match_count)
-        print(f'Total card count = {cc}')
-
-def test_length_winning_set():
-    assert get_winning_set("Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53") == {48, 83, 17, 86}
-    assert get_winning_set("Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19") == {32, 61}
-    assert get_winning_set("Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1") == {1, 21}
-    assert get_winning_set("Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83") == {84}
-    assert get_winning_set("Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36") == set()
-    assert get_winning_set("Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11") == set()
-
-def test_card_count():
-    assert card_count([4, 2, 2, 1, 0, 0]) == 30
+    match_count: list[int] = []
+    score = 0
+    for line in read_input():
+        winning_set = get_winning_set(line)
+        match_count.append(len(winning_set))
+        if len(winning_set) > 0:
+            score += 2**(len(winning_set)-1)
+    print(f'"Score" = {score}')
+    cc = card_count(match_count)
+    print(f'Total card count = {cc}')

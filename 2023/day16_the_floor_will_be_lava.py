@@ -28,7 +28,7 @@ OFFSETMAP = {
 
 def read_input(s: str = None) -> np.ndarray:
     if s is None:
-        with open('day16_beams_input.txt', 'r') as f:
+        with open('../private/2023/day16_beams_input.txt', 'r') as f:
             lines = f.read().strip().splitlines()
     else:
         lines = s.strip().splitlines()
@@ -84,28 +84,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-SAMPLE_INPUT = """
-.|...\\....
-|.-.\\.....
-.....|-...
-........|.
-..........
-.........\\
-..../.\\\\..
-.-.-/..|..
-.|....-|.\\
-..//.|....
-"""
-
-
-def test_trace():
-    grid = read_input(SAMPLE_INPUT)
-    energized = trace(grid)
-    assert np.sum(energized) == 46
-
-
-def test_traceall():
-    grid = read_input(SAMPLE_INPUT)
-    assert traceall(grid) == 51

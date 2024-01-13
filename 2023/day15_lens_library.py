@@ -2,7 +2,7 @@
 
 def read_input(s: str = None) -> list[str]:
     if s is None:
-        with open('day15_hash_input.txt', 'r') as f:
+        with open('../private/2023/day15_hash_input.txt', 'r') as f:
             return f.read().strip().split(',')
     else:
         return s.strip().split(',')
@@ -109,18 +109,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-def test_hash() -> None:
-    assert hashstr("HASH") == 52
-
-
-def test_hashsumseq() -> None:
-    test_instr = "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"
-    assert hashsumseq(test_instr.split(',')) == 1320
-
-
-def test_focusingpower() -> None:
-    test_instr = "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"
-    hm = Hashmapper(test_instr.split(','))
-    assert hm.focusingpower() == 145
