@@ -1,4 +1,6 @@
 import itertools
+import collections
+import pytest
 
 
 def read_data(txt: str = None) -> list[str]:
@@ -33,14 +35,19 @@ def addv(a: tuple[int, int], b: tuple[int, int]) -> tuple[int, int]:
     return a[0] + b[0], a[1] + b[1]
 
 
-CHAR_CONNECTION = {}
-for k, v in CHAR_CONNECTION_CARDINAL.items():
-    dirs = [CARDINAL_TO_VEC[c] for c in v]
-    assert len(dirs) == 2
-    CHAR_CONNECTION[k] = {
-        negv(dirs[0]): dirs[1],
-        negv(dirs[1]): dirs[0],
-    }
+def build_char_connection():
+    result = {}
+    for k, v in CHAR_CONNECTION_CARDINAL.items():
+        dirs = [CARDINAL_TO_VEC[c] for c in v]
+        assert len(dirs) == 2
+        result[k] = {
+            negv(dirs[0]): dirs[1],
+            negv(dirs[1]): dirs[0],
+        }
+    return result
+
+
+CHAR_CONNECTION = build_char_connection()
 
 
 def find_pipe_loop(field: list[str]) -> list[tuple[int, int]]:
@@ -66,7 +73,6 @@ def find_pipe_loop(field: list[str]) -> list[tuple[int, int]]:
         if (in_range(candidate_pos)
                 and (c := field[candidate_pos[0]][candidate_pos[1]]) in CHAR_CONNECTION
                 and d in CHAR_CONNECTION[c]):
-            print(c)
             curr_pos = candidate_pos
             del candidate_pos
             break
@@ -110,8 +116,7 @@ def infer_start_flag(loop) -> str:
     return flag
 
 
-def find_inside_outside(field: list[list[str]], loop: list[tuple[int, int]]) -> list[list[int]]:
-    winding = 0
+def find_inside_outside(field: list[str], loop: list[tuple[int, int]]) -> list[list[int]]:
     nrows, ncols = len(field), len(field[0])
     marks = [[0 for _ in range(ncols)] for _ in range(nrows)]
     for i in range(nrows):
@@ -143,7 +148,7 @@ def find_inside_outside(field: list[list[str]], loop: list[tuple[int, int]]) -> 
     return marks
 
 
-def render(field: list[str], loop: list[tuple[int, int]], infield = None) -> str:
+def render(field: list[str], loop: list[tuple[int, int]], infield=None) -> str:
     """Translate the characters in the field to nice terminal graphics unicode characters.
     All the points on the loop are rendered in bold.
     This is not very efficient."""
@@ -168,24 +173,15 @@ def main():
     field = read_data()
     loop = find_pipe_loop(field)
     iofield = find_inside_outside(field, loop)
-    n_in, n_out, n_loop = 0, 0, 0
-    for row in iofield:
-        for flag in row:
-            if flag == 1:
-                n_in += 1
-            elif flag == -1:
-                n_out += 1
-            elif flag == 0:
-                n_loop += 1
-            else:
-                raise ValueError("Invalid in/out value")
+    cnt = collections.Counter(flag for flag in itertools.chain(*iofield))
+    n_in, n_out, n_loop = cnt[1], cnt[-1], cnt[0]
     print(render(field, loop, iofield))
     print(f"Loop of size {len(loop)}, half is {len(loop)/2}")
-    print(f"In: {n_in}")  # 1313 Too High
-    print(f"Out: {n_out}")
-    print(f"Loop {n_loop}")
-    print(f"Sum: {n_in + n_out + n_loop}")
-    print(f"Size: {len(field)} x {len(field[0])} = {len(field)*len(field[0])}")
+    print(f"Cells inside the loop: {n_in}")  # 1313 Too High
+    print(f"Cells outside the loop: {n_out}")
+    print(f"Cells making up the loop: {n_loop}")
+    print(f"Sum of above cell counts: {n_in + n_out + n_loop}")
+    print(f"Region size: {len(field)} x {len(field[0])} = {len(field)*len(field[0])}")
 
 
 if __name__ == '__main__':
@@ -199,8 +195,7 @@ TEST_SAMPLE_A = """.....
 ....."""
 
 
-TEST_SAMPLE_B = """
-7-F7-
+TEST_SAMPLE_B = """7-F7-
 .FJ|7
 SJLL7
 |F--J
@@ -240,31 +235,50 @@ L.L7LFJ|||||FJL7||LJ
 L7JLJL-JLJLJL--JLJ.L"""
 
 
-def test_find_pipe_loop():
-    pass
+def flip_loop(loop: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    return [loop[0]] + [x for x in reversed(loop[1:])]
 
-def find_inside_for_test(sample):
+
+@pytest.mark.parametrize(
+    "sample,answer",
+    [
+        (
+            TEST_SAMPLE_A,
+            [(1, 1), (2, 1), (3, 1), (3, 2), (3, 3), (2, 3), (1, 3), (1, 2)]
+        ), (
+            TEST_SAMPLE_B,
+            [(2, 0), (3, 0), (4, 0), (4, 1), (3, 1), (3, 2), (3, 3), (3, 4),
+             (2, 4), (2, 3), (1, 3), (0, 3),
+             (0, 2), (1, 2), (1, 1), (2, 1)],
+        ),
+    ]
+)
+def test_find_pipe_loop(sample, answer):
+    field = read_data(sample)
+    loop = find_pipe_loop(field)
+    assert (loop == answer) or (loop == flip_loop(answer))
+
+
+@pytest.mark.parametrize(
+    "sample,answer",
+    [(TEST_SAMPLE_C, 4), (TEST_SAMPLE_D, 8), (TEST_SAMPLE_E, 10)]
+)
+def test_find_inside(sample, answer):
     field = read_data(sample)
     loop = find_pipe_loop(field)
     iofield = find_inside_outside(field, loop)
     print(render(field, loop, iofield))
-    return sum(x == 1 for x in itertools.chain(*iofield))
-
-
-def test_find_inside():
-    assert find_inside_for_test(TEST_SAMPLE_C) == 4
-    assert find_inside_for_test(TEST_SAMPLE_D) == 8
-    assert find_inside_for_test(TEST_SAMPLE_E) == 10
+    assert sum(x == 1 for x in itertools.chain(*iofield)) == answer
 
 
 def test_infer_start_flag():
-    assert infer_start_flag([(4,4), (5,4), (3,4)]) == '|'
-    assert infer_start_flag([(4,4), (3,4), (5,4)]) == '|'
-    assert infer_start_flag([(4,4), (4,3), (4,5)]) == '-'
-    assert infer_start_flag([(4,4), (4,5), (4,3)]) == '-'
-    assert infer_start_flag([(4,4), (4,3), (5,4)]) == '7'
-    assert infer_start_flag([(4,4), (5,4), (4,3)]) == '7'
-    assert infer_start_flag([(4,4), (5,4), (4,5)]) == 'F'
-    assert infer_start_flag([(4,4), (4,5), (5,4)]) == 'F'
-    assert infer_start_flag([(4,4), (3,4), (4,3)]) == 'J'
-    assert infer_start_flag([(4,4), (4,3), (3,4)]) == 'J'
+    assert infer_start_flag([(4, 4), (5, 4), (3, 4)]) == '|'
+    assert infer_start_flag([(4, 4), (3, 4), (5, 4)]) == '|'
+    assert infer_start_flag([(4, 4), (4, 3), (4, 5)]) == '-'
+    assert infer_start_flag([(4, 4), (4, 5), (4, 3)]) == '-'
+    assert infer_start_flag([(4, 4), (4, 3), (5, 4)]) == '7'
+    assert infer_start_flag([(4, 4), (5, 4), (4, 3)]) == '7'
+    assert infer_start_flag([(4, 4), (5, 4), (4, 5)]) == 'F'
+    assert infer_start_flag([(4, 4), (4, 5), (5, 4)]) == 'F'
+    assert infer_start_flag([(4, 4), (3, 4), (4, 3)]) == 'J'
+    assert infer_start_flag([(4, 4), (4, 3), (3, 4)]) == 'J'
