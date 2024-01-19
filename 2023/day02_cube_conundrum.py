@@ -52,23 +52,29 @@ def read_input():
                 return f.readlines()
 
 
-if __name__ == '__main__':
-        
+def part1() -> int:
         sum_yes_index = 0
-        sum_all_index = 0
+        # sum_all_index = 0
         for line in read_input():
                 line = line.strip()
                 if is_possible(line):
                         sum_yes_index += game_index(line)
                 # print(f'DEBUG: {game_index(line)} => {is_possible(line)} for {line.strip()}')
                 # sum_all_index += game_index(line)
-        print(sum_yes_index)  # 2922 too high
+        return sum_yes_index  # 2922 too high
         # print(sum_all_index)
 
+
+def part2() -> int:
         sum_powers = 0
         for line in read_input():
                 line = line.strip()
                 p = min_possible(line)
                 power = p[0] * p[1] * p[2]
                 sum_powers += power
-        print(sum_powers)
+        return sum_powers
+
+
+if __name__ == '__main__':
+        print(f"Part 1: {part1()}")
+        print(f"Part 2: {part2()}")

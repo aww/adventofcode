@@ -114,21 +114,26 @@ def applyspincycles(rocks, n=1, verbose=False):
     return rocks
 
 
-def main():
-    print("Part 1")
-    print("===================")
+def part1() -> int:
+    # print("Part 1")
+    # print("===================")
     rocks = read_input()
-    print(f"Initial: {stats(rocks)}")
+    # print(f"Initial: {stats(rocks)}")
     tilt_north(rocks)
-    print(f"After a shift north: {stats(rocks)}")
+    # print(f"After a shift north: {stats(rocks)}")
+    return stats(rocks)['load']
 
-    print()
-    print("Part 2")
-    print("===================")
+
+def part2() -> int:
+    # print()
+    # print("Part 2")
+    # print("===================")
     rocks = read_input()
-    rocks = applyspincycles(rocks, n=1000000000, verbose=True)
-    print(stats(rocks))
+    rocks = applyspincycles(rocks, n=1000000000, verbose=False)
+    return stats(rocks)['load']
+    # print(stats(rocks))
 
 
 if __name__ == '__main__':
-    main()
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

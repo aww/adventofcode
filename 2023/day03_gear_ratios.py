@@ -79,8 +79,8 @@ def is_symbol(c: str):
 
 def preformat(x: list[str]) -> list[str]:
     out = []
-    for l in x:
-        out.append(l.replace('\n', '.'))
+    for line in x:
+        out.append(line.replace('\n', '.'))
     return out
 
 
@@ -147,31 +147,25 @@ def find_gear_pairs(x: list[str]):
     return pairs
 
 
-def main():
+def part1() -> int:
     lines = preformat(read_input())
-    nums = find_numbers(lines)
-    print(f'{len(nums)} found')
+    # nums = find_numbers(lines)
+    # print(f'{len(nums)} found')
     accepted, not_accepted = find_adjacent_numbers(lines)
-    print(accepted)
-    print(f'Count = {len(accepted)}')
-    print(sum([x[0] for x in accepted]))  # 507908 too high
-    print(not_accepted)
-    print(f'Count = {len(not_accepted)}')
-    print(sum([x[0] for x in not_accepted]))
-    # append(f.readline())
-    # lines.append(f.readline())
-    # lines.append(f.readline())
-    # # Do stuff
-    #
-    # lines = f.readlines()
-    #
+    # print(f'Count = {len(accepted)}')
+    # print(f'Count = {len(not_accepted)}')
+    # print(sum([x[0] for x in not_accepted]))
+    return sum([x[0] for x in accepted])  # 507908 too high
 
+
+def part2() -> int:
     lines = preformat(read_input())
     pairs = find_gear_pairs(lines)
     print(pairs)
     print(f'Count = {len(pairs)}')
-    print(sum([x[0]*x[1] for x in pairs]))  # 507908 too high
+    return sum([x[0]*x[1] for x in pairs])  # 507908 too high
 
 
 if __name__ == '__main__':
-    main()
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

@@ -52,8 +52,8 @@ class Box:
 
 
 class Hashmapper:
-    def __init__(self, seq: int = None):
-        self.boxes = [Box() for i in range(256)]
+    def __init__(self, seq: list[str] = None):
+        self.boxes = [Box() for _ in range(256)]
         if seq is not None:
             for op in seq:
                 self.op(op)
@@ -87,25 +87,18 @@ class Hashmapper:
         return "\n".join(result)
 
 
-def main():
-    print("Part 1")
-    print("===================")
+def part1() -> int:
     seq = read_input()
     hashsum = hashsumseq(seq)
-    print(f"Hash sum: {hashsum}")
+    return hashsum
 
-    print()
-    print(hashstr("rn"))
-    print(hashstr("cm"))
-    print(hashstr("qp"))
-    print(hashstr("pc"))
-    print()
 
-    print("Part 2")
-    print("===================")
+def part2() -> int:
+    seq = read_input()
     hm = Hashmapper(seq)
-    print(f"Focusing power: {hm.focusingpower()}")  # Too high: 22350496384
+    return hm.focusingpower()
 
 
 if __name__ == '__main__':
-    main()
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

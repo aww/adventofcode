@@ -102,20 +102,18 @@ def minimize(grid: np.ndarray, pathmin=0, pathmax=3, findpath=False) -> int:
     raise ValueError("Ran out of steps without finding target.")
 
 
-def main():
-    print("Part 1")
-    print("===================")
+def part1() -> int:
     grid = read_input()
     mloss = minimize(grid, pathmax=3)
-    print(mloss)
+    return mloss
 
-    print()
-    print("Part 2")
-    print("===================")
+
+def part2() -> int:
     grid = read_input()
     mloss = minimize(grid, pathmin=4, pathmax=10)
-    print(mloss)
+    return mloss
 
 
 if __name__ == '__main__':
-    main()
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

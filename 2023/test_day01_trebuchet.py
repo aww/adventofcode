@@ -1,4 +1,6 @@
+import pytest
 from day01_trebuchet import isdigit, extract_calib, extract_calib_spelled
+from day01_trebuchet import part1, part2
 
 
 def test_isdigit():
@@ -31,3 +33,13 @@ def test_calib_spelled():
 	}
 	for record, value in examples.items():
 		assert extract_calib_spelled(record) == value
+
+
+@pytest.mark.puzzle
+def test_day01_part1(benchmark):
+	assert benchmark(part1) == 54605
+
+
+@pytest.mark.puzzle
+def test_day01_part2(benchmark):
+	assert benchmark(part2) == 55429

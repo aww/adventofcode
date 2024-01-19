@@ -1,4 +1,5 @@
-from day17_clumsy_crucible import read_input, minimize
+import pytest
+import day17_clumsy_crucible as day17
 
 
 SAMPLE_INPUT = """
@@ -27,18 +28,28 @@ SAMPLE_INPUT_B = """
 
 
 def test_minimize_part1():
-    blocks = read_input(SAMPLE_INPUT)
-    heatloss = minimize(blocks)
+    blocks = day17.read_input(SAMPLE_INPUT)
+    heatloss = day17.minimize(blocks)
     assert heatloss == 102
 
 
 def test_minimize_part2a():
-    blocks = read_input(SAMPLE_INPUT)
-    heatloss = minimize(blocks, pathmin=4, pathmax=10)
+    blocks = day17.read_input(SAMPLE_INPUT)
+    heatloss = day17.minimize(blocks, pathmin=4, pathmax=10)
     assert heatloss == 94
 
 
 def test_minimize_part2b():
-    blocks = read_input(SAMPLE_INPUT_B)
-    heatloss = minimize(blocks, pathmin=4, pathmax=10)
+    blocks = day17.read_input(SAMPLE_INPUT_B)
+    heatloss = day17.minimize(blocks, pathmin=4, pathmax=10)
     assert heatloss == 71
+
+@pytest.mark.longrun
+@pytest.mark.puzzle
+def test_day17_part1(benchmark):
+    assert benchmark(day17.part1) == 1065
+
+@pytest.mark.longrun
+@pytest.mark.puzzle
+def test_day17_part2(benchmark):
+    assert benchmark(day17.part2) == 1249

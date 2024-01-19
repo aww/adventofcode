@@ -28,14 +28,24 @@ def card_count(matches: list[int]) -> int:
     return total
 
 
-if __name__ == '__main__':
-    match_count: list[int] = []
+def part1() -> int:
     score = 0
     for line in read_input():
         winning_set = get_winning_set(line)
-        match_count.append(len(winning_set))
         if len(winning_set) > 0:
             score += 2**(len(winning_set)-1)
-    print(f'"Score" = {score}')
+    return score
+
+
+def part2() -> int:
+    match_count: list[int] = []
+    for line in read_input():
+        winning_set = get_winning_set(line)
+        match_count.append(len(winning_set))
     cc = card_count(match_count)
-    print(f'Total card count = {cc}')
+    return cc
+
+
+if __name__ == '__main__':
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

@@ -68,19 +68,18 @@ def traceall(grid: np.ndarray) -> int:
     return max(e)
 
 
-def main():
-    print("Part 1")
-    print("===================")
+def part1() -> int:
     grid = read_input()
     energized = trace(grid)
-    print(f"Total energized cells: {np.sum(energized)}")
-    print()
-    print("Part 2")
-    print("===================")
+    return np.sum(energized)
+
+
+def part2() -> int:
     grid = read_input()
     maxenergized = traceall(grid)
-    print(f"Max energized cells: {maxenergized}")
+    return maxenergized
 
 
 if __name__ == '__main__':
-    main()
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

@@ -58,7 +58,10 @@ class AlmanacTable:
         return result
 
 
-def read_tables(almanac_text: str) -> (list[int], dict[str, AlmanacTable]):
+def read_tables(almanac_text: str = None) -> (list[int], dict[str, AlmanacTable]):
+    if almanac_text is None:
+        with open('../private/2023/day05_almanac_input.txt', 'r') as f:
+            almanac_text = f.read()
     almanac_sections = almanac_text.split('\n\n')
     seeds = []
     tables = {}
@@ -97,29 +100,35 @@ def map_seedranges_to_locationranges(seedranges, tables) -> list[tuple[int, int]
     return locranges
 
 
-if __name__ == '__main__':
-    with open('../private/2023/day05_almanac_input.txt', 'r') as f:
-        almanac_text = f.read()
-    seeds, tables = read_tables(almanac_text)
-    print(f"Number of seeds: {len(seeds)}")
-    for t in tables:
-        print(f"Table: {t}")
+def part1() -> int:
+    seeds, tables = read_tables()
+    # print(f"Number of seeds: {len(seeds)}")
+    # for t in tables:
+    #     print(f"Table: {t}")
 
     locs = []
     for s in seeds:
         loc = map_seed_to_location(s, tables)
         locs.append(loc)
-        print(f"Seed {s} maps to location {loc}")
-    print(f"Lowest location is {min(locs)}")
+        # print(f"Seed {s} maps to location {loc}")
+    return min(locs)
 
+
+def part2() -> int:
+    seeds, tables = read_tables()
     assert len(seeds) % 2 == 0
     seed_ranges = []
     for i in range(len(seeds) // 2):
         seed_ranges.append((seeds[2*i], seeds[2*i+1]))
-    seed_range_len = sum([x[1] for x in seed_ranges])
-    print(f"Found {len(seed_ranges)} seed ranges of total length {seed_range_len}")
+    # seed_range_len = sum([x[1] for x in seed_ranges])
+    # print(f"Found {len(seed_ranges)} seed ranges of total length {seed_range_len}")
     locranges = map_seedranges_to_locationranges(seed_ranges, tables)
-    loc_range_len = sum([x[1] for x in locranges])
-    print(f"Found {len(locranges)} location ranges of total length {loc_range_len}")
+    # loc_range_len = sum([x[1] for x in locranges])
+    # print(f"Found {len(locranges)} location ranges of total length {loc_range_len}")
     minimum = min([lr[0] for lr in locranges])
-    print(f"Minimum location is {minimum}")
+    return minimum
+
+
+if __name__ == '__main__':
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")

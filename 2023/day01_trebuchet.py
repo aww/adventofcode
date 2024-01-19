@@ -1,14 +1,12 @@
-import itertools
-import re
 
 
 def read_input():
-        with open('../private/2023/day01_trebuchet_calibration_input.txt', 'r') as f:
-                return f.readlines()
+	with open('../private/2023/day01_trebuchet_calibration_input.txt', 'r') as f:
+		return f.readlines()
 
 
 def isdigit(c):
-	return ord('0') <= ord(c) and ord(c) <= ord('9')
+	return ord('0') <= ord(c) <= ord('9')
 
 
 def extract_calib(line):
@@ -54,13 +52,16 @@ def extract_calib_spelled(line):
 	return calib
 
 
-def main():
-	calib_sum = sum(extract_calib_spelled(line) for line in read_input())
-	print(calib_sum)  # 55427 too low
-
+def part1():
 	calib_sum = sum(extract_calib(line) for line in read_input())
-	print(calib_sum)
+	return calib_sum  # 55427 too low
+
+
+def part2():
+	calib_sum = sum(extract_calib_spelled(line) for line in read_input())
+	return calib_sum
 
 
 if __name__ == '__main__':
-        main()
+	print(f"Part 1: {part1()}")
+	print(f"Part 2: {part2()}")

@@ -1,8 +1,9 @@
-from day05_if_you_give_a_seed_a_fertilizer import AlmanacTable, read_tables, map_seedranges_to_locationranges
+import pytest
+import day05_if_you_give_a_seed_a_fertilizer as day05
 
 
 def test_almanac_table():
-    a = AlmanacTable()
+    a = day05.AlmanacTable()
     a.add_entry(50, 98, 2)
     a.add_entry(52, 50, 48)
     assert a.map(0) == 0
@@ -21,7 +22,7 @@ def test_almanac_table():
 
 
 def test_maprange():
-    a = AlmanacTable()
+    a = day05.AlmanacTable()
     a.add_entry(50, 98, 2)
     a.add_entry(52, 50, 48)
     assert a.maprange(79, 14) == [(81, 14)]
@@ -66,12 +67,22 @@ humidity-to-location map:
 
 
 def test_full_maprange():
-    seeds, tables = read_tables(SAMPLE_TABLE_STR)
+    seeds, tables = day05.read_tables(SAMPLE_TABLE_STR)
     seed_ranges = []
     for i in range(len(seeds) // 2):
         seed_ranges.append((seeds[2 * i], seeds[2 * i + 1]))
     # Should I turn the list making in the following execution into
     # yields and iterators and find the min without collecting full list?
-    locranges = map_seedranges_to_locationranges(seed_ranges, tables)
+    locranges = day05.map_seedranges_to_locationranges(seed_ranges, tables)
     minimum = min([lr[0] for lr in locranges])
     assert minimum == 46
+
+
+@pytest.mark.puzzle
+def test_day05_part1(benchmark):
+    assert benchmark(day05.part1) == 486613012
+
+
+@pytest.mark.puzzle
+def test_day05_part2(benchmark):
+    assert benchmark(day05.part2) == 56931769

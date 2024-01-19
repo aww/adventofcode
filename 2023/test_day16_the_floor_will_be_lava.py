@@ -1,5 +1,6 @@
+import pytest
 import numpy as np
-from day16_the_floor_will_be_lava import read_input, trace, traceall
+import day16_the_floor_will_be_lava as day16
 
 
 SAMPLE_INPUT = """
@@ -17,11 +18,22 @@ SAMPLE_INPUT = """
 
 
 def test_trace():
-    grid = read_input(SAMPLE_INPUT)
-    energized = trace(grid)
+    grid = day16.read_input(SAMPLE_INPUT)
+    energized = day16.trace(grid)
     assert np.sum(energized) == 46
 
 
 def test_traceall():
-    grid = read_input(SAMPLE_INPUT)
-    assert traceall(grid) == 51
+    grid = day16.read_input(SAMPLE_INPUT)
+    assert day16.traceall(grid) == 51
+
+
+@pytest.mark.puzzle
+def test_day16_part1(benchmark):
+    assert benchmark(day16.part1) == 8146
+
+
+@pytest.mark.longrun
+@pytest.mark.puzzle
+def test_day16_part2(benchmark):
+    assert benchmark(day16.part2) == 8358

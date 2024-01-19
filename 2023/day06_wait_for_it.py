@@ -47,7 +47,7 @@ def ways_to_beat_fast(t: int, d: int) -> int:
         if i*i == discriminant:
             # The discriminant is a perfect square => integer roots
             # => can't count end points (they are ties of the record)
-            return i-2
+            return i-1
     x, y = (t - math.sqrt(t*t-4*d))/2, (t + math.sqrt(t*t-4*d))/2
     # print(x, y)
     count = math.floor(y) - math.ceil(x) + 1
@@ -55,20 +55,24 @@ def ways_to_beat_fast(t: int, d: int) -> int:
     return count
 
 
-def main():
+def part1() -> int:
     races = read_races()
-    print(races)
+    # print(races)
     ways = list([ways_to_beat_fast(r[0], r[1]) for r in races])
-    print(f"Ways to beat record in each race: {ways}")
+    # print(f"Ways to beat record in each race: {ways}")
     prod = 1
     for w in ways:
         prod *= w
-    print(f"Product = {prod}")
-    print()
+    return prod
+
+
+def part2() -> int:
     races = read_races(None, fix_kerning=True)
     result_after_fix = ways_to_beat_fast(races[0][0], races[0][1])
-    print(f"After fixing kerning they ways are {result_after_fix}")
+    # print(f"After fixing kerning they ways are {result_after_fix}")
+    return result_after_fix
 
 
 if __name__ == '__main__':
-    main()
+    print(f"Part 1: {part1()}")
+    print(f"Part 2: {part2()}")
