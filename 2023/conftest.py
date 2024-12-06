@@ -10,10 +10,16 @@ def pytest_configure(config):
         "markers", "puzzle: mark puzzle solution tests (generally slower)"
     )
     if not config.option.puzzle:
-        setattr(config.option, 'markexpr', 'not puzzle')
+        if len(config.option.markexpr):
+            setattr(config.option, 'markexpr', config.option.markexpr + ' and not puzzle')
+        else:
+            setattr(config.option, 'markexpr', 'not puzzle')
 
     config.addinivalue_line(
         "markers", "longrun: mark particularly long running tests, likely an unoptimized puzzle solution"
     )
     if not config.option.longrun:
-        setattr(config.option, 'markexpr', 'not longrun')
+        if len(config.option.markexpr):
+            setattr(config.option, 'markexpr', config.option.markexpr + ' and not longrun')
+        else:
+            setattr(config.option, 'markexpr', 'not longrun')
