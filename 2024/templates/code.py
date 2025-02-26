@@ -3,7 +3,7 @@ def read_input(s: str = None) -> list[str]:
     if s is None:
         with open('../private/2024/{{full_label}}_input.txt', 'r') as f:
             s = f.read()
-    for line in s.splitlines():
+    for line in s.strip().splitlines():
         line = line.strip()
         if len(line) > 0:
             rows.append(line)
