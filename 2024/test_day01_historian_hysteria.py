@@ -14,7 +14,7 @@ EXAMPLE_INPUT = """
 EXAMPLE_LISTS = [
     [3, 4, 2, 1, 3, 3],
     [4, 3, 5, 3, 9, 3],
-    ]
+]
 
 SAMPLE_INPUT = """
 47078   87818
@@ -22,6 +22,7 @@ SAMPLE_INPUT = """
 44723   23473
 87598   26876
 """
+
 
 def test_input():
     a, b = day1.read_input(EXAMPLE_INPUT)

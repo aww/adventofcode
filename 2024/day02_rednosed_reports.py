@@ -1,10 +1,7 @@
-
-
-
-def read_input(s: str = None) -> list[list]:
+def read_input(s: str | None = None) -> list[list[int]]:
     reports = []
     if s is None:
-        with open('../private/2024/day02_rednosed_reports_input.txt', 'r') as f:
+        with open("../private/2024/day02_rednosed_reports_input.txt", "r") as f:
             s = f.read()
     for line in s.splitlines():
         line = line.strip()
@@ -39,7 +36,7 @@ def is_report_safe(lst: list) -> bool:
 
 
 def eliminate_element(lst: list, i: int):
-    return lst[:i] + lst[i+1:]
+    return lst[:i] + lst[i + 1 :]
 
 
 def is_report_safe_dampened(lst: list) -> bool:

@@ -36,26 +36,31 @@ EXAMPLE_RESULT = 143
 
 
 def test_split_order():
-    assert day5.split_order('47|53') == (47,53)
-    assert day5.split_order('97|13') == (97,13)
+    assert day5.split_order("47|53") == (47, 53)
+    assert day5.split_order("97|13") == (97, 13)
 
 
 def test_split_updates():
-    assert day5.split_update('''75,47,61,53,29
-    ''') == [75,47,61,53,29]
+    assert (
+        day5.split_update(
+            """75,47,61,53,29
+    """
+        )
+        == [75, 47, 61, 53, 29]
+    )
 
 
 def test_middle_number():
-    assert day5.middle_number([75,47,61,53,29]) == 61
-    assert day5.middle_number([97,61,53,29,13]) == 53
-    assert day5.middle_number([75,29,13]) == 29
+    assert day5.middle_number([75, 47, 61, 53, 29]) == 61
+    assert day5.middle_number([97, 61, 53, 29, 13]) == 53
+    assert day5.middle_number([75, 29, 13]) == 29
 
 
 def test_order_check():
-    rules = day5.OrderRules([(47,13), (75,47), (97,75)])
-    assert rules.check([75,47,61,53,29])
-    assert rules.check([97,61,53,29,13])
-    assert ~ rules.check([75,97,47,61,53])
+    rules = day5.OrderRules([(47, 13), (75, 47), (97, 75)])
+    assert rules.check([75, 47, 61, 53, 29])
+    assert rules.check([97, 61, 53, 29, 13])
+    assert ~rules.check([75, 97, 47, 61, 53])
 
 
 def test_sum_middle_correct():

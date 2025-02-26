@@ -11,6 +11,7 @@ EXAMPLE_INPUT = """
 1 3 6 7 9
 """
 
+
 def test_is_safe():
     assert day2.is_report_safe([7, 6, 4, 2, 1]) == True
     assert day2.is_report_safe([1, 2, 7, 8, 9]) == False

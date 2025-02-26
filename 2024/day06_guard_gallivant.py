@@ -4,22 +4,25 @@ import bisect
 from typing import Tuple
 
 
-def read_input(s: str = None) -> list[str]:
-    rows = []
+def read_input(
+    s: str | None = None,
+) -> tuple[tuple[int, int], tuple[int, int], list[tuple[int, int]]]:
     if s is None:
-        with open('../private/2024/day06_guard_gallivant_input.txt', 'r') as f:
+        with open("../private/2024/day06_guard_gallivant_input.txt", "r") as f:
             s = f.read()
-    obstacles = []
-    start = None
+    obstacles: list[tuple[int, int]] = []
+    start: tuple[int, int] = (-1, -1)
     linesizes = []
     for j, line in enumerate(s.strip().splitlines()):
         line = line.strip()
         linesizes.append(len(line))
         for i, c in enumerate(line):
-            if c == '#':
-                obstacles.append((i,j))
-            elif c == '^':
-                start = (i,j)
+            if c == "#":
+                obstacles.append((i, j))
+            elif c == "^":
+                start = (i, j)
+    if start == (-1, -1):
+        raise ValueError("Start marker is missing")
     assert min(linesizes) == max(linesizes)
     gridsize = (linesizes[0], len(linesizes))
     return gridsize, start, obstacles
@@ -97,11 +100,13 @@ def read_input(s: str = None) -> list[str]:
 #     return len(visited)
 
 
-class Obstacles():
+class Obstacles:
     def __init__(self, obstacles):
         self.o = obstacles
-        self.slice = defaultdict(list), defaultdict(list)  # i=0 vertical slice, i=1 horizontal
-        for a,b in obstacles:
+        self.slice = defaultdict(list), defaultdict(
+            list
+        )  # i=0 vertical slice, i=1 horizontal
+        for a, b in obstacles:
             # Create some mapping between a horizontal or vertical position and all the
             # obstacles on that slice.
             self.slice[0][a].append(b)
@@ -117,17 +122,17 @@ class Obstacles():
         next_obs = list(pos)
         if pos[i] in self.slice[i]:
             slc = self.slice[i][pos[i]]
-            bi = bisect.bisect_left(slc, pos[1-i])
-            if d[1-i] > 0:
+            bi = bisect.bisect_left(slc, pos[1 - i])
+            if d[1 - i] > 0:
                 if bi >= len(slc):
                     return None
                 else:
-                    next_obs[1-i] = slc[bi]
+                    next_obs[1 - i] = slc[bi]
             else:
                 if bi == 0:
                     return None
                 else:
-                    next_obs[1-i] = slc[bi-1]
+                    next_obs[1 - i] = slc[bi - 1]
             return tuple(next_obs)
         #     try:
         #     if d[1]:
@@ -165,38 +170,43 @@ def rotdir(d):
 def trip(gridsize, start, obstacles) -> Tuple[list, bool]:
     obs = Obstacles(obstacles)
     pos = start
-    d = (0,-1)
-    #steps = 0
+    d = (0, -1)
+    # steps = 0
     vertices = [start]
     # The following is only used for checking for cycles, deliberately not including start.
     # Start could be revisited and not be part of a cycle:
     # consider the case of an obstacle behind the start point.
     vertexset = set()
-    while(True):
+    while True:
         nxtobs = obs.next(pos, d)
         if nxtobs is None:
             match d:
-                case (0,1):
+                case (0, 1):
                     pos = (pos[0], gridsize[1] - 1)
-                    #segmentsteps += gridsize[1] - pos[1]
-                case (0,-1):
+                    # segmentsteps += gridsize[1] - pos[1]
+                case (0, -1):
                     pos = (pos[0], 0)
-                    #segmentsteps += pos[1] + 1
-                case (1,0):
+                    # segmentsteps += pos[1] + 1
+                case (1, 0):
                     pos = (gridsize[0] - 1, pos[1])
-                    #segmentsteps += gridsize[0] - pos[0]
-                case (-1,0):
+                    # segmentsteps += gridsize[0] - pos[0]
+                case (-1, 0):
                     pos = (0, pos[1])
-                    #segmentsteps += pos[0] + 1
+                    # segmentsteps += pos[0] + 1
             # print(f"{len(vertices)} {segmentsteps=}")
-            #steps += segmentsteps
+            # steps += segmentsteps
             vertices.append(pos)
             return vertices, False
-        #segmentsteps = abs(pos[0]-nxtobs[0]) + abs(pos[1]-nxtobs[1]) - 1
+        # segmentsteps = abs(pos[0]-nxtobs[0]) + abs(pos[1]-nxtobs[1]) - 1
         # print(f"{len(vertices)} {segmentsteps=}")
-        #steps += segmentsteps
-        pos = nxtobs[0]-d[0], nxtobs[1]-d[1]  # next position is a step back from next obstacle
-        if pos != vertices[-1]:  # two obstacles diagonal from each other can cause rotation in place
+        # steps += segmentsteps
+        pos = (
+            nxtobs[0] - d[0],
+            nxtobs[1] - d[1],
+        )  # next position is a step back from next obstacle
+        if (
+            pos != vertices[-1]
+        ):  # two obstacles diagonal from each other can cause rotation in place
             vertices.append(pos)
             if pos in vertexset:
                 return vertices, True  # In a cycle
@@ -204,7 +214,7 @@ def trip(gridsize, start, obstacles) -> Tuple[list, bool]:
         d = rotdir(d)
 
 
-def tripcoverage(vertices) -> int:
+def tripcoverage(vertices) -> set[tuple[int, int]]:
     coverage = set()
     prv = vertices[0]
     for nxt in vertices[1:]:
@@ -231,7 +241,7 @@ def tripdistance(vertices) -> int:
     distance = 1
     prv = vertices[0]
     for nxt in vertices[1:]:
-        distance += abs(nxt[0]-prv[0]) + abs(nxt[1]-prv[1])
+        distance += abs(nxt[0] - prv[0]) + abs(nxt[1] - prv[1])
         prv = nxt
     return distance
 
@@ -244,7 +254,7 @@ def visit_count_of_trip(gridsize, start, obstacles) -> int:
     return coverage
 
 
-def possible_loop_obstacles(gridsize, start, obstacles) -> int:
+def possible_loop_obstacles(gridsize, start, obstacles) -> set[tuple[int, int]]:
     vertices, isloop = trip(gridsize, start, obstacles)
     if isloop:
         assert ValueError("Found a loop in problem")
@@ -253,7 +263,7 @@ def possible_loop_obstacles(gridsize, start, obstacles) -> int:
     loopobs = set()
     loopobsvert = []
     for p in coverage:
-        vertices, isloop = trip(gridsize, start, obstacles + [p]) 
+        vertices, isloop = trip(gridsize, start, obstacles + [p])
         if isloop:
             loopobs.add(p)
             loopobsvert.append((p, vertices))

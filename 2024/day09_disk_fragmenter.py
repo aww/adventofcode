@@ -1,7 +1,7 @@
-def read_input(s: str = None) -> list[str]:
+def read_input(s: str | None = None) -> list[str]:
     rows = []
     if s is None:
-        with open('../private/2024/day09_disk_fragmenter_input.txt', 'r') as f:
+        with open("../private/2024/day09_disk_fragmenter_input.txt", "r") as f:
             s = f.read()
     for line in s.strip().splitlines():
         line = line.strip()

@@ -15,7 +15,7 @@ EXAMPLE_INPUT1 = """
 ..........
 """
 EXAMPLE_RESULT1 = 2
-EXAMPLE_NODES1 = {(3,1), (6,7)}
+EXAMPLE_NODES1 = {(3, 1), (6, 7)}
 
 EXAMPLE_INPUT2 = """
 ..........
@@ -30,7 +30,7 @@ EXAMPLE_INPUT2 = """
 ..........
 """
 EXAMPLE_RESULT2 = 4
-EXAMPLE_NODES2 = {(3,1), (6,7), (0,2), (2,6)}
+EXAMPLE_NODES2 = {(3, 1), (6, 7), (0, 2), (2, 6)}
 
 EXAMPLE_INPUT3 = """
 ............
@@ -47,8 +47,22 @@ EXAMPLE_INPUT3 = """
 ............
 """
 EXAMPLE_RESULT3 = 14
-EXAMPLE_NODES3 = {(6,0), (11,0), (3,1), (4,2), (10,2), (2,3), (9,4),
-                  (1,5), (6,5), (3,6), (0,7), (7,7), (10,10), (10,11)}
+EXAMPLE_NODES3 = {
+    (6, 0),
+    (11, 0),
+    (3, 1),
+    (4, 2),
+    (10, 2),
+    (2, 3),
+    (9, 4),
+    (1, 5),
+    (6, 5),
+    (3, 6),
+    (0, 7),
+    (7, 7),
+    (10, 10),
+    (10, 11),
+}
 EXAMPLE_RESULT3_RES = 34
 
 
@@ -65,7 +79,17 @@ T.........
 ..........
 """
 EXAMPLE_RESULT4_RES = 9
-EXAMPLE_NODES4_RES = {(0,0), (5,0), (3,1), (1,2), (6,2), (9,3), (2,4), (3,6), (4,8)}
+EXAMPLE_NODES4_RES = {
+    (0, 0),
+    (5, 0),
+    (3, 1),
+    (1, 2),
+    (6, 2),
+    (9, 3),
+    (2, 4),
+    (3, 6),
+    (4, 8),
+}
 
 
 def test_find_nodes1():
@@ -82,12 +106,13 @@ def test_find_nodes3():
     antennas, gridsize = day8.read_input(EXAMPLE_INPUT3)
     assert day8.find_nodes(antennas, gridsize) == EXAMPLE_NODES3
 
+
 def test_find_nodes4_res():
     antennas, gridsize = day8.read_input(EXAMPLE_INPUT4)
     print(antennas)
     assert day8.find_nodes_res(antennas, gridsize) == EXAMPLE_NODES4_RES
 
+
 def test_find_nodes3_res():
     antennas, gridsize = day8.read_input(EXAMPLE_INPUT3)
     assert len(day8.find_nodes_res(antennas, gridsize)) == EXAMPLE_RESULT3_RES
-

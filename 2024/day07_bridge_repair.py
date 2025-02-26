@@ -1,15 +1,14 @@
 import itertools
 
 
-def read_input(s: str = None) -> list[str]:
-    rows = []
+def read_input(s: str | None = None) -> list[tuple[int, list[int]]]:
     if s is None:
-        with open('../private/2024/day07_bridge_repair_input.txt', 'r') as f:
+        with open("../private/2024/day07_bridge_repair_input.txt", "r") as f:
             s = f.read()
     equations = []
     for line in s.strip().splitlines():
         line = line.strip()
-        calibstr, numstr = line.split(': ')
+        calibstr, numstr = line.split(": ")
         calib = int(calibstr)
         numlist = list(map(int, numstr.split()))
         equations.append((calib, numlist))
@@ -17,15 +16,15 @@ def read_input(s: str = None) -> list[str]:
 
 
 def apply_operators(nums, ops):
-    for opseq in itertools.product(ops, repeat=len(nums)-1):
+    for opseq in itertools.product(ops, repeat=len(nums) - 1):
         value = nums[0]
         for i, op in enumerate(opseq):
-            value = op(value, nums[i+1])
+            value = op(value, nums[i + 1])
         yield value
 
 
 def total_calibration_result(equations) -> int:
-    ops = [lambda x,y: x+y, lambda x,y: x*y]
+    ops = [lambda x, y: x + y, lambda x, y: x * y]
     total = 0
     for calib, nums in equations:
         for value in apply_operators(nums, ops):
@@ -36,7 +35,7 @@ def total_calibration_result(equations) -> int:
 
 
 def total_calibration_result2(equations) -> int:
-    ops = [lambda x,y: x+y, lambda x,y: x*y, lambda x,y: int(str(x)+str(y))]
+    ops = [lambda x, y: x + y, lambda x, y: x * y, lambda x, y: int(str(x) + str(y))]
     total = 0
     for calib, nums in equations:
         for value in apply_operators(nums, ops):

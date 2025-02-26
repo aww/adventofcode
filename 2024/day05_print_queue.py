@@ -1,22 +1,21 @@
 from collections import defaultdict
 
 
-def split_order(txt):
-    a, b = txt.strip().split('|')
+def split_order(txt: str) -> tuple[int, int]:
+    a, b = txt.strip().split("|")
     return int(a), int(b)
 
 
-def split_update(txt):
-    seq = txt.strip().split(',')
+def split_update(txt: str) -> list[int]:
+    seq = txt.strip().split(",")
     return list([int(x) for x in seq])
 
 
-def read_input(s: str = None) -> list[str]:
-    rows = []
+def read_input(s: str | None = None) -> tuple[list[tuple[int, int]], list[list[int]]]:
     if s is None:
-        with open('../private/2024/day05_print_queue_input.txt', 'r') as f:
+        with open("../private/2024/day05_print_queue_input.txt", "r") as f:
             s = f.read()
-    txt_orders, txt_updates = s.strip().split('\n\n')
+    txt_orders, txt_updates = s.strip().split("\n\n")
     orders = list(map(split_order, txt_orders.splitlines()))
     updates = list(map(split_update, txt_updates.splitlines()))
     return orders, updates
@@ -26,11 +25,10 @@ def middle_number(seq):
     return seq[len(seq) // 2]
 
 
-
-class OrderRules():
+class OrderRules:
     def __init__(self, orders):
         self.after = defaultdict(set)
-        for a,b in orders:
+        for a, b in orders:
             self.after[a].add(b)
 
     def check(self, seq):
@@ -50,7 +48,7 @@ class OrderRules():
         prev = set()  # Tracks what values are previous to the current one
         is_corrected = False
         i = 0
-        while(i < len(seq)):
+        while i < len(seq):
             s = seq[i]
             if s in self.after:
                 afters = self.after[s]
@@ -65,7 +63,9 @@ class OrderRules():
                         if x in must_move:
                             seq.insert(i, seq.pop(j))
                             i -= 1
-                            prev.discard(x)  # Update prev, presumes we will move all instances
+                            prev.discard(
+                                x
+                            )  # Update prev, presumes we will move all instances
             prev.add(s)
             i += 1
         if is_corrected:

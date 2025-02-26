@@ -21,6 +21,7 @@ def test_total_calibration_result():
     equations = day7.read_input(EXAMPLE_INPUT)
     assert day7.total_calibration_result(equations) == EXAMPLE_RESULT1
 
+
 def test_total_calibration_result2():
     equations = day7.read_input(EXAMPLE_INPUT)
     assert day7.total_calibration_result2(equations) == EXAMPLE_RESULT2

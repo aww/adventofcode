@@ -2,10 +2,10 @@ import numpy as np
 from collections import Counter
 
 
-def read_input(s: str = None) -> tuple[list, list]:
+def read_input(s: str | None = None) -> tuple[list, list]:
     list1, list2 = [], []
     if s is None:
-        with open('../private/2024/day01_historian_hysteria_input.txt', 'r') as f:
+        with open("../private/2024/day01_historian_hysteria_input.txt", "r") as f:
             s = f.read()
     for line in s.splitlines():
         line = line.strip()
@@ -13,7 +13,7 @@ def read_input(s: str = None) -> tuple[list, list]:
             a, b = line.split()
             list1.append(int(a))
             list2.append(int(b))
-    return list1, list2  #np.array([list(x) for x in lines], dtype=int)
+    return list1, list2  # np.array([list(x) for x in lines], dtype=int)
 
 
 def distance(list1, list2):
@@ -21,7 +21,7 @@ def distance(list1, list2):
     list2.sort()
     total_distance = 0
     for a, b in zip(list1, list2):
-        total_distance += abs(a-b)
+        total_distance += abs(a - b)
     return total_distance
 
 
