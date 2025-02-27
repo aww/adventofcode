@@ -41,12 +41,12 @@ def move(expanded: list[int | None]) -> list[int | None]:
     j = len(expanded) - 1
     for i, marker in enumerate(expanded):
         if j < i:
-            break  # i has moved into the region from which we have moved file blocks
+            break  # i points at region from which file blocks were "removed"
         if marker is None:
             while (x := expanded[j]) is None:
                 j -= 1
             if j <= i:
-                break  # if this happens then at i and beyond it must be all empty
+                break  # if this happens then the rest is None
             r.append(x)
             j -= 1
         else:
