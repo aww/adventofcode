@@ -8,4 +8,4 @@ EXAMPLE_RESULT = 0
 
 
 def test_():
-    pass
+    input = day{{day}}.read_input(EXAMPLE_INPUT)
