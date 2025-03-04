@@ -1,2 +1,4 @@
 [flake8]
 profile = black
+max-line-length = 88
+ignore = E203

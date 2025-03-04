@@ -1,4 +1,3 @@
-import pytest
 import {{full_label}} as day{{day}}
 
 
