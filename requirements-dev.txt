@@ -1,0 +1,8 @@
+pytest
+pre-commit
+black
+mypy
+flake8
+requests
+jinja2
+beautifulsoup4
