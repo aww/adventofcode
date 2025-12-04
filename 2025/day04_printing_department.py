@@ -11,6 +11,9 @@ def read_input(s: str | None = None) -> list[str]:
 
 
 def accessible_rolls(input: list[str]) -> int:
+    # A little overkill, but maybe useful in part 2,
+    # we start by creating a dictionary of roll coordinates -> neighbor count;
+    # then we just count entries with low neighbor counts.
     rolls: dict[tuple[int, int], int] = dict()
     for irow, row in enumerate(input):
         for icol, char in enumerate(row):
@@ -35,6 +38,8 @@ def accessible_rolls(input: list[str]) -> int:
 
 
 def removable_rolls(input: list[str]) -> int:
+    # Slight expansion of what we did in part 1:
+    # Instead of storing neighbor counts store a list of neighbor coordinates
     rolls: dict[tuple[int, int], list[tuple[int, int]]] = dict()
     for irow, row in enumerate(input):
         for icol, char in enumerate(row):
@@ -51,6 +56,7 @@ def removable_rolls(input: list[str]) -> int:
                     if prevneighbor in rolls:
                         rolls[prevneighbor].append(thiscoord)
                         rolls[thiscoord].append(prevneighbor)
+    # Create a list of coordinates where a roll can be removed
     to_remove = set()
     for coord, neighbors in rolls.items():
         if len(neighbors) < 4:
@@ -58,6 +64,9 @@ def removable_rolls(input: list[str]) -> int:
 
     removecount = 0
     while len(to_remove) > 0:
+        # 1. remove all references to this roll from the neighbor rolls
+        # 2. if the neighbor drops below the threshold then they are a removal candidate
+        # 3. delete this roll
         coord = to_remove.pop()
         for neighbor in rolls[coord]:
             rolls[neighbor].remove(coord)
